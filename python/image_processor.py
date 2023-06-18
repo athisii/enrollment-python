@@ -4,20 +4,30 @@ import cv2
 import dlib
 import numpy as np
 from PIL import ImageEnhance, Image
-from rembg import remove
+from rembg import remove, new_session
 
-BRIGHTNESS_FACTOR = 1.4
+# constant values
+BRIGHTNESS_FACTOR = 1.2
 INPUT_IMAGE_WIDTH = 640
 INPUT_IMAGE_HEIGHT = 480
 INPUT_IMAGE_PATH = '/usr/share/enrollment/images/input.jpg'
 OUTPUT_IMAGE_DPI = 300
-OUTPUT_IMAGE_CROPPED_PATH = "/usr/share/enrollment/images/out.png"  # for test purpose
+OUTPUT_IMAGE_REMOVED_BG_PATH = "/usr/share/enrollment/images/removed_bg.png"  # for test purpose
 OUTPUT_IMAGE_COMPRESS_SUB_RESOLUTION = 64
 OUTPUT_IMAGE_COMPRESS_SUB_PATH = '/usr/share/enrollment/croppedimg/compressed.png'
 OUTPUT_IMAGE_SUB_RESOLUTION = 300
 OUTPUT_IMAGE_SUB_PATH = '/usr/share/enrollment/croppedimg/sub.png'
 PADDING = 30
 PREDICTOR_MODEL_PATH = '/usr/share/enrollment/model/model.dat'
+
+# Test which model gives best result and then set accordingly
+"""
+Different Model Names: 
+            1. u2net
+            2. isnet-general-use
+"""
+
+REMBG_MODEL_NAME = "u2net"  # OR REMBG_MODEL_NAME = "isnet-general-use"
 
 
 def slope(x1, y1, x2, y2):
@@ -29,8 +39,6 @@ def dx(x1, x2):
 
 
 def enhance_and_save_img(image: Image):
-    if image is None:
-        raise "Received a None object"
     brightness_enhancer = ImageEnhance.Brightness(image)
     brighten_img = brightness_enhancer.enhance(float(BRIGHTNESS_FACTOR))
 
@@ -48,19 +56,19 @@ def enhance_and_save_img(image: Image):
 
 
 def remove_bg_and_crop_img(image: Image) -> Image:
-    if image is None:
-        raise "Received a None object"
-    bg_removed_img = remove(image, post_process_mask=True)
-    # Convert the image to binary using threshold
-    binary_image = bg_removed_img.convert('L').point(lambda p: p > 0 and 255)  # True and number --> number
-    x1, y1, x2, y2 = binary_image.getbbox()
-    x_diff = x2 - x1
-    y_diff = y2 - y1
+    session = new_session(model_name=REMBG_MODEL_NAME)
+    bg_removed_img = remove(image, alpha_matting=True, session=session, post_process_mask=True)
+    # bg_removed_img.save(OUTPUT_IMAGE_REMOVED_BG_PATH)  # Test purpose
+
+    x1, y1, x2, y2 = bg_removed_img.getbbox()
+    x_diff = x2 - x1  # width
+    y_diff = y2 - y1  # height
+    # reduce width if greater than OUTPUT_IMAGE_DPI; trim from both sides
     if x_diff > OUTPUT_IMAGE_DPI:
         extra_pixel = (x_diff - OUTPUT_IMAGE_DPI) / 2
         x1 += extra_pixel
         x2 -= extra_pixel
-
+    # reduce height if greater than OUTPUT_IMAGE_DPI; trim only from bottom
     if y_diff > OUTPUT_IMAGE_DPI:
         y2 -= y_diff - OUTPUT_IMAGE_DPI
 
@@ -70,7 +78,6 @@ def remove_bg_and_crop_img(image: Image) -> Image:
 def main():
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(PREDICTOR_MODEL_PATH)
-
     frame = cv2.imread(INPUT_IMAGE_PATH)
     detected_face = detector(frame, 0)
     face_count = len(detected_face)
@@ -84,7 +91,6 @@ def main():
         print("Message= More than one person detected in frame")
     else:
         for k, d in enumerate(detected_face):
-            # [(543, 281)(758, 496)]
             x_min, y_min, x_max, y_max = (d.left(), d.top(), d.right(), d.bottom())
             x_min = x_min - 50
             x_max = x_max + 50
@@ -136,9 +142,7 @@ def main():
                             if fm < 60:
                                 print("Message= Blurred Image")
                             else:
-                                cropped_image = remove_bg_and_crop_img(Image.open(INPUT_IMAGE_PATH))
-                                # cropped_image.save(OUTPUT_IMAGE_CROPPED_PATH) # for test purpose
-                                enhance_and_save_img(cropped_image)
+                                enhance_and_save_img(remove_bg_and_crop_img(Image.open(INPUT_IMAGE_PATH)))
 
 
 main()
