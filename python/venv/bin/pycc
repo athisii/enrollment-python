@@ -1,0 +1,3 @@
+#!/usr/share/enrollment/python/venv/bin/python
+from numba.pycc import main
+main()
