@@ -15,9 +15,9 @@ OUTPUT_IMAGE_DPI = 300
 OUTPUT_IMAGE_REMOVED_BG_PATH = "/usr/share/enrollment/images/removed_bg.png"  # for test purpose
 OUTPUT_IMAGE_COMPRESS_SUB_RESOLUTION = 64
 OUTPUT_IMAGE_COMPRESS_SUB_PATH = '/usr/share/enrollment/croppedimg/compressed.png'
-OUTPUT_IMAGE_SUB_RESOLUTION = 300
+OUTPUT_IMAGE_SUB_RESOLUTION = 300  # need to be finalized
 OUTPUT_IMAGE_SUB_PATH = '/usr/share/enrollment/croppedimg/sub.png'
-PADDING = 30
+PADDING = 0  # add padding if necessary
 PREDICTOR_MODEL_PATH = '/usr/share/enrollment/model/model.dat'
 
 # Test which model gives best result and then set accordingly
@@ -57,21 +57,10 @@ def enhance_and_save_img(image: Image):
 
 def remove_bg_and_crop_img(image: Image) -> Image:
     session = new_session(model_name=REMBG_MODEL_NAME)
+    # adjust alpha_matting_erode_size value to change edge blurring; alpha matting must be set to True
     bg_removed_img = remove(image, alpha_matting=True, session=session, post_process_mask=True)
     # bg_removed_img.save(OUTPUT_IMAGE_REMOVED_BG_PATH)  # Test purpose
-
     x1, y1, x2, y2 = bg_removed_img.getbbox()
-    x_diff = x2 - x1  # width
-    y_diff = y2 - y1  # height
-    # reduce width if greater than OUTPUT_IMAGE_DPI; trim from both sides
-    if x_diff > OUTPUT_IMAGE_DPI:
-        extra_pixel = (x_diff - OUTPUT_IMAGE_DPI) / 2
-        x1 += extra_pixel
-        x2 -= extra_pixel
-    # reduce height if greater than OUTPUT_IMAGE_DPI; trim only from bottom
-    if y_diff > OUTPUT_IMAGE_DPI:
-        y2 -= y_diff - OUTPUT_IMAGE_DPI
-
     return bg_removed_img.crop((x1 - PADDING, y1, x2 + PADDING, y2 + PADDING))
 
 
