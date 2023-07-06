@@ -8,8 +8,8 @@ from rembg import remove, new_session
 
 # constant values
 BRIGHTNESS_FACTOR = 1.2
-INPUT_IMAGE_WIDTH = 640
-INPUT_IMAGE_HEIGHT = 480
+INPUT_IMAGE_WIDTH = 640  # Camera max width
+INPUT_IMAGE_HEIGHT = 480  # Camera max height
 INPUT_IMAGE_PATH = '/usr/share/enrollment/images/input.jpg'
 OUTPUT_IMAGE_DPI = 400
 OUTPUT_IMAGE_REMOVED_BG_PATH = "/usr/share/enrollment/images/removed_bg.png"  # for test purpose
@@ -19,6 +19,11 @@ OUTPUT_IMAGE_SUB_RESOLUTION = 300  # need to be finalized
 OUTPUT_IMAGE_SUB_PATH = '/usr/share/enrollment/croppedimg/sub.png'
 PADDING = 0  # add padding if necessary
 PREDICTOR_MODEL_PATH = '/usr/share/enrollment/model/model.dat'
+PARENT_DIR = '/usr/share/enrollment/images'
+MIN_HEIGHT = 400  # close-up camera for clarity
+MAX_HEIGHT = INPUT_IMAGE_HEIGHT - 30
+MIN_WIDTH = 400  # close-up camera for clarity
+MAX_WIDTH = INPUT_IMAGE_WIDTH - 90
 
 # Test which model gives best result and then set accordingly
 """
@@ -28,6 +33,7 @@ Different Model Names:
 """
 
 REMBG_MODEL_NAME = "u2net"  # OR REMBG_MODEL_NAME = "isnet-general-use"
+face_coordinates = None
 
 
 def slope(x1, y1, x2, y2):
@@ -53,6 +59,22 @@ def enhance_and_save_img(image: Image):
         dpi=(OUTPUT_IMAGE_DPI, OUTPUT_IMAGE_DPI), optimize=False,
         quality=100)
     print("Valid image")
+
+
+def remove_bg_test(image: Image):
+    session = new_session(model_name=REMBG_MODEL_NAME)
+    # adjust alpha_matting_erode_size value to change edge blurring; alpha matting must be set to True
+    bg_removed_img = remove(image, alpha_matting=True, session=session, post_process_mask=True)
+    # bg_removed_img.save(OUTPUT_IMAGE_REMOVED_BG_PATH)  # Test purpose
+    x1, y1, x2, y2 = bg_removed_img.getbbox()
+    height = y2 - y1
+    width = x2 - x1
+    print(f'Height: {height}')
+    print(f'Width: {width}')
+    if MIN_HEIGHT <= height <= MAX_HEIGHT and MIN_WIDTH <= width <= MAX_WIDTH:
+        enhance_and_save_img(bg_removed_img.crop((x1 - PADDING, y1, x2 + PADDING, y2 + PADDING)))
+    else:
+        print("Message= Fit your body in the red box.")
 
 
 def remove_bg_and_crop_img(image: Image) -> Image:
@@ -81,6 +103,8 @@ def main():
     else:
         for k, d in enumerate(detected_face):
             x_min, y_min, x_max, y_max = (d.left(), d.top(), d.right(), d.bottom())
+            global face_coordinates
+            face_coordinates = d
             x_min = x_min - 50
             x_max = x_max + 50
             y_max = y_max + 50
@@ -131,7 +155,8 @@ def main():
                             if fm < 60:
                                 print("Message= Blurred Image")
                             else:
-                                enhance_and_save_img(remove_bg_and_crop_img(Image.open(INPUT_IMAGE_PATH)))
+                                # remove_bg_and_crop_img(Image.open(INPUT_IMAGE_PATH))
+                                remove_bg_test(Image.open(INPUT_IMAGE_PATH))
 
 
 main()
