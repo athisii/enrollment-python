@@ -10,13 +10,13 @@ from rembg import remove, new_session
 BRIGHTNESS_FACTOR = 1.2
 INPUT_IMAGE_WIDTH = 640
 INPUT_IMAGE_HEIGHT = 480
-INPUT_IMAGE_PATH = '/usr/share/enrollment/images/input.jpg'
-OUTPUT_IMAGE_DPI = 400
-OUTPUT_IMAGE_REMOVED_BG_PATH = "/usr/share/enrollment/images/removed_bg.png"  # for test purpose
-OUTPUT_IMAGE_COMPRESS_SUB_RESOLUTION = 64
-OUTPUT_IMAGE_COMPRESS_SUB_PATH = '/usr/share/enrollment/croppedimg/compressed.png'
-OUTPUT_IMAGE_SUB_RESOLUTION = 300  # need to be finalized
-OUTPUT_IMAGE_SUB_PATH = '/usr/share/enrollment/croppedimg/sub.png'
+INPUT_PHOTO_PATH = '/usr/share/enrollment/images/photo_input.jpg'
+OUTPUT_PHOTO_DPI = 400
+OUTPUT_PHOTO_REMOVED_BG_PATH = "/usr/share/enrollment/images/removed_bg.png"  # for test purpose
+OUTPUT_PHOTO_COMPRESSED_RESOLUTION = 64
+OUTPUT_PHOTO_COMPRESSED_PATH = '/usr/share/enrollment/images/photo_compressed.png'
+OUTPUT_PHOTO_RESOLUTION = 300
+OUTPUT_PHOTO_PATH = '/usr/share/enrollment/images/photo.png'
 PADDING = 0  # add padding if necessary
 PREDICTOR_MODEL_PATH = '/usr/share/enrollment/model/model.dat'
 
@@ -42,15 +42,15 @@ def enhance_and_save_img(image: Image):
     brightness_enhancer = ImageEnhance.Brightness(image)
     brighten_img = brightness_enhancer.enhance(float(BRIGHTNESS_FACTOR))
 
-    brighten_img.resize((OUTPUT_IMAGE_COMPRESS_SUB_RESOLUTION, OUTPUT_IMAGE_COMPRESS_SUB_RESOLUTION),
-                        Image.LANCZOS).save(OUTPUT_IMAGE_COMPRESS_SUB_PATH,
+    brighten_img.resize((OUTPUT_PHOTO_COMPRESSED_RESOLUTION, OUTPUT_PHOTO_COMPRESSED_RESOLUTION),
+                        Image.LANCZOS).save(OUTPUT_PHOTO_COMPRESSED_PATH,
                                             "PNG",
-                                            dpi=(OUTPUT_IMAGE_DPI, OUTPUT_IMAGE_DPI), optimize=False,
+                                            dpi=(OUTPUT_PHOTO_DPI, OUTPUT_PHOTO_DPI), optimize=False,
                                             quality=100)
 
-    brighten_img.resize((OUTPUT_IMAGE_SUB_RESOLUTION, OUTPUT_IMAGE_SUB_RESOLUTION), Image.LANCZOS).save(
-        OUTPUT_IMAGE_SUB_PATH, "PNG",
-        dpi=(OUTPUT_IMAGE_DPI, OUTPUT_IMAGE_DPI), optimize=False,
+    brighten_img.resize((OUTPUT_PHOTO_RESOLUTION, OUTPUT_PHOTO_RESOLUTION), Image.LANCZOS).save(
+        OUTPUT_PHOTO_PATH, "PNG",
+        dpi=(OUTPUT_PHOTO_DPI, OUTPUT_PHOTO_DPI), optimize=False,
         quality=100)
     print("Valid image")
 
@@ -67,7 +67,7 @@ def remove_bg_and_crop_img(image: Image) -> Image:
 def main():
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(PREDICTOR_MODEL_PATH)
-    frame = cv2.imread(INPUT_IMAGE_PATH)
+    frame = cv2.imread(INPUT_PHOTO_PATH)
     detected_face = detector(frame, 0)
     face_count = len(detected_face)
     if face_count == 0:
@@ -131,7 +131,7 @@ def main():
                             if fm < 60:
                                 print("Message= Blurred Image")
                             else:
-                                enhance_and_save_img(remove_bg_and_crop_img(Image.open(INPUT_IMAGE_PATH)))
+                                enhance_and_save_img(remove_bg_and_crop_img(Image.open(INPUT_PHOTO_PATH)))
 
 
 main()
