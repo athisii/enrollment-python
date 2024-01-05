@@ -1,0 +1,214 @@
+.root {
+    -fx-font-size: 22px;    -fx-background-color: #FFF;
+    -fx-btn-bg-color: darkblue;
+}
+
+.bg-color-darkblue {
+    -fx-background-color: darkblue;
+}
+
+.bg-color-bright-blue {
+    -fx-background-color: #1990EA;
+}
+
+.bg-color-white {
+    -fx-background-color: #FFF;
+}
+
+.bg-color-greenish-blue {
+    -fx-background-color: #00C79C;
+}
+
+
+.text-white {
+    -fx-text-fill: #FFF;
+}
+
+.text-darkblue {
+    -fx-text-fill: darkblue;
+}
+
+.pref-width-small {
+    -fx-pref-width: 182px;}
+
+.pref-width-medium {
+    -fx-pref-width: 454px;}
+
+.label-border-style {
+    -fx-border-color: #DAD3D3;
+    -fx-border-style: solid;
+    -fx-pref-width: 400px;    -fx-pref-height: 42px;    -fx-border-radius: 7px;}
+
+.button {
+    -fx-text-fill: #FFF;
+    -fx-background-color: -fx-btn-bg-color;
+}
+
+.btn-medium {
+    -fx-pref-width: 273px;    -fx-pref-height: 56px;    -fx-background-radius: 28px;}
+
+.btn-large {
+    -fx-font-size: 25px;    -fx-pref-width: 491px;    -fx-pref-height: 56px;    -fx-background-radius: 28px;}
+
+.btn-img {
+    -fx-background-color: #FFF;
+    -fx-pref-height: 56px;    -fx-pref-width: 72px;    -fx-padding: 7px;}
+
+.btn-progress {
+    -fx-text-fill: #000;
+    -fx-background-color: #BBB5B5;
+    -fx-background-radius: 28px;}
+
+.btn-progress-completed {
+    -fx-text-fill: #FFF;
+    -fx-background-color: -fx-btn-bg-color;
+}
+
+/*  image container */
+.img-container {
+    -fx-pref-width: 56px;    -fx-pref-height: 56px;}
+
+.img-container-small {
+    -fx-pref-width: 70px;    -fx-pref-height: 70px;}
+
+.img-container-medium {
+    -fx-pref-width: 98px;    -fx-pref-height: 98px;}
+
+.img-container-large {
+    -fx-pref-width: 196px;    -fx-pref-height: 196px;}
+
+.img-container-xlarge {
+    -fx-pref-width: 280px;    -fx-pref-height: 280px;}
+
+.border-color-darkblue {
+    -fx-border-color: darkblue;
+}
+
+/* padding */
+.padding {
+    -fx-padding: 7px;}
+
+.padding-small {
+    -fx-padding: 14px;}
+
+.padding-medium {
+    -fx-padding: 28px;}
+
+.padding-large {
+    -fx-padding: 42px;}
+
+/* border-radius */
+.border-radius {
+    -fx-border-radius: 7px;}
+
+.border-radius-small {
+    -fx-border-radius: 14px;}
+
+.border-radius-medium {
+    -fx-border-radius: 28px;}
+
+.border-radius-large {
+    -fx-border-radius: 42px;}
+
+/* background-radius */
+.bg-border-radius {
+    -fx-background-radius: 7px;}
+
+.bg-border-radius-small {
+    -fx-background-radius: 14px;}
+
+.bg-border-radius-medium {
+    -fx-background-radius: 28px;}
+
+.bg-border-radius-large {
+    -fx-background-radius: 42px;}
+
+.font-size {
+    -fx-font-size: 19px;}
+
+.font-size-small {
+    -fx-font-size: 22px;}
+
+.font-size-medium {
+    -fx-font-size: 25px;}
+
+.font-size-large {
+    -fx-font-size: 28px;}
+
+.press-effect:pressed {
+    -fx-background-color: linear-gradient(darkcyan, cyan);
+}
+
+.input-field {
+    -fx-font-size: 22px;    -fx-pref-width: 454px;    -fx-pref-height: 47px;    -fx-background-radius: 11px;}
+
+.min-width {
+    -fx-min-width: 8px;}
+
+.min-width-small {
+    -fx-min-width: 18px;}
+
+.min-width-medium {
+    -fx-min-width: 36px;}
+
+.min-width-large {
+    -fx-min-width: 182px;}
+
+.min-width-xlarge {
+    -fx-min-width: 273px;}
+
+.min-width-xx-large {
+    -fx-min-width: 909px;}
+
+.min-height {
+    -fx-min-height: 7px;}
+
+.min-height-small {
+    -fx-min-height: 14px;}
+
+.min-height-medium {
+    -fx-min-height: 28px;}
+
+.min-height-large {
+    -fx-min-height: 42px;}
+
+.min-height-xlarge {
+    -fx-min-height: 56px;}
+
+.confirm-box {
+    -fx-background-color: #01DADA;
+    -fx-background-radius: 14px;}
+
+.canvas-container {
+    -fx-pref-width: 909px;    -fx-pref-height: 420px;    -fx-border-color: black;
+    -fx-border-width: 2px;    -fx-border-style: solid;
+}
+
+/* table style */
+.table-view { /* default table */
+    -fx-fixed-cell-size: 56px;}
+
+.table-container-3-cols {
+    -fx-pref-width: 1092px;    -fx-pref-height: 560px;}
+
+.table-container-4-cols {
+    -fx-pref-width: 1183px;    -fx-pref-height: 560px;}
+
+.column-header {
+    -fx-background-color: linear-gradient(to bottom, #01DADA, #3BC7C4);
+}
+
+.table-column {
+    -fx-alignment: center;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: green;
+}
+
+.table-view-column-width {
+    -fx-pref-width: 364px;}
+
+.combo-box {
+    -fx-background-radius: 7px;    -fx-background-color: #CC99FF;
+    -fx-pref-width: 364px;}

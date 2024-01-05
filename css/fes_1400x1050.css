@@ -1,0 +1,284 @@
+.root {
+    -fx-font-size: 20px;
+    -fx-background-color: #FFF;
+    -fx-btn-bg-color: darkblue;
+}
+
+.bg-color-darkblue {
+    -fx-background-color: darkblue;
+}
+
+.bg-color-bright-blue {
+    -fx-background-color: #1990EA;
+}
+
+.bg-color-white {
+    -fx-background-color: #FFF;
+}
+
+.bg-color-greenish-blue {
+    -fx-background-color: #00c79c;
+}
+
+
+.text-white {
+    -fx-text-fill: #FFF;
+}
+
+.text-darkblue {
+    -fx-text-fill: darkblue;
+}
+
+.pref-width-small {
+    -fx-pref-width: 130px;
+}
+
+.pref-width-medium {
+    -fx-pref-width: 325px;
+}
+
+.label-border-style {
+    -fx-border-color: #DAD3D3;
+    -fx-border-style: solid;
+    -fx-pref-width: 286px;
+    -fx-pref-height: 39px;
+    -fx-border-radius: 6px;
+}
+
+.button {
+    -fx-text-fill: #FFF;
+    -fx-background-color: -fx-btn-bg-color;
+}
+
+.btn-medium {
+    -fx-pref-width: 195px;
+    -fx-pref-height: 52px;
+    -fx-background-radius: 26px;
+}
+
+.btn-large {
+    -fx-font-size: 23px;
+    -fx-pref-width: 351px;
+    -fx-pref-height: 52px;
+    -fx-background-radius: 26px;
+}
+
+.btn-img {
+    -fx-background-color: #FFF;
+    -fx-pref-height: 52px;
+    -fx-pref-width: 52px;
+    -fx-padding: 6px;
+}
+
+.btn-progress {
+    -fx-text-fill: #000;
+    -fx-background-color: #BBB5B5;
+    -fx-background-radius: 26px;
+}
+
+.btn-progress-completed {
+    -fx-text-fill: #FFF;
+    -fx-background-color: -fx-btn-bg-color;
+}
+
+/*  image container */
+.img-container {
+    -fx-pref-width: 52px;
+    -fx-pref-height: 52px;
+}
+
+.img-container-small {
+    -fx-pref-width: 65px;
+    -fx-pref-height: 65px;
+}
+
+.img-container-medium {
+    -fx-pref-width: 91px;
+    -fx-pref-height: 91px;
+}
+
+.img-container-large {
+    -fx-pref-width: 182px;
+    -fx-pref-height: 182px;
+}
+
+.img-container-xlarge {
+    -fx-pref-width: 260px;
+    -fx-pref-height: 260px;
+}
+
+.border-color-darkblue {
+    -fx-border-color: darkblue;
+}
+
+/* padding */
+.padding {
+    -fx-padding: 6px;
+}
+
+.padding-small {
+    -fx-padding: 13px;
+}
+
+.padding-medium {
+    -fx-padding: 26px;
+}
+
+.padding-large {
+    -fx-padding: 39px;
+}
+
+/* border-radius */
+.border-radius {
+    -fx-border-radius: 6px;
+}
+
+.border-radius-small {
+    -fx-border-radius: 13px;
+}
+
+.border-radius-medium {
+    -fx-border-radius: 26px;
+}
+
+.border-radius-large {
+    -fx-border-radius: 39px;
+}
+
+/* background-radius */
+.bg-border-radius {
+    -fx-background-radius: 6px;
+}
+
+.bg-border-radius-small {
+    -fx-background-radius: 13px;
+}
+
+.bg-border-radius-medium {
+    -fx-background-radius: 26px;
+}
+
+.bg-border-radius-large {
+    -fx-background-radius: 39px;
+}
+
+.font-size {
+    -fx-font-size: 18px;
+}
+
+.font-size-small {
+    -fx-font-size: 20px;
+}
+
+.font-size-medium {
+    -fx-font-size: 23px;
+}
+
+.font-size-large {
+    -fx-font-size: 26px;
+}
+
+.press-effect:pressed {
+    -fx-background-color: linear-gradient(darkcyan, cyan);
+}
+
+.input-field {
+    -fx-font-size: 20px;
+    -fx-pref-width: 325px;
+    -fx-pref-height: 44px;
+    -fx-background-radius: 10px;
+}
+
+.min-width {
+    -fx-min-width: 6px;
+}
+
+.min-width-small {
+    -fx-min-width: 13px;
+}
+
+.min-width-medium {
+    -fx-min-width: 26px;
+}
+
+.min-width-large {
+    -fx-min-width: 130px;
+}
+
+.min-width-xlarge {
+    -fx-min-width: 195px;
+}
+
+.min-width-xx-large {
+    -fx-min-width: 650px;
+}
+
+.min-height {
+    -fx-min-height: 6px;
+}
+
+.min-height-small {
+    -fx-min-height: 13px;
+}
+
+.min-height-medium {
+    -fx-min-height: 26px;
+}
+
+.min-height-large {
+    -fx-min-height: 39px;
+}
+
+.min-height-xlarge {
+    -fx-min-height: 52px;
+}
+
+.confirm-box {
+    -fx-background-color: #01DADA;
+    -fx-background-radius: 13px;
+}
+
+.canvas-container {
+    -fx-pref-width: 650px;
+    -fx-pref-height: 390px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+
+/* table style */
+.table-view { /* default table */
+    -fx-fixed-cell-size: 52px;
+}
+
+.table-container-3-cols {
+    -fx-pref-width: 780px;
+    -fx-pref-height: 520px;
+}
+
+.table-container-4-cols {
+    -fx-pref-width: 845px;
+    -fx-pref-height: 520px;
+}
+
+.column-header {
+    -fx-background-color: linear-gradient(to bottom, #01DADA, #3BC7C4);
+}
+
+.table-column {
+    -fx-alignment: center;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: green;
+}
+
+.table-view-column-width {
+    -fx-pref-width: 260px;
+}
+
+.combo-box {
+    -fx-background-radius: 6px;
+    -fx-background-color: #CC99ff;
+    -fx-pref-width: 260px;
+}

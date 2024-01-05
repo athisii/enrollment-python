@@ -129,7 +129,7 @@ def main():
                             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                             fm = cv2.Laplacian(gray, cv2.CV_64F).var()
                             if fm < 60:
-                                print("Message= Blurred Image")
+                                print("Message= Blurred image. Please come closer to the camera.")
                             else:
                                 enhance_and_save_img(remove_bg_and_crop_img(Image.open(INPUT_PHOTO_PATH)))
 
