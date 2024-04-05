@@ -19,7 +19,8 @@ OUTPUT_PHOTO_RESOLUTION = 300
 OUTPUT_PHOTO_PATH = '/usr/share/enrollment/images/photo.png'
 PADDING = 0  # add padding if necessary
 PREDICTOR_MODEL_PATH = '/usr/share/enrollment/model/model.dat'
-
+SQUARE_RED_BOX_COR = (100, 38, 540, 478)  # (x1, y1, x2, y2) as per square redbox(400x400) size on UI
+LINE_THICKNESS = 4
 # Test which model gives best result and then set accordingly
 """
 Different Model Names: 
@@ -60,8 +61,35 @@ def remove_bg_and_crop_img(image: Image) -> Image:
     # adjust alpha_matting_erode_size value to change edge blurring; alpha matting must be set to True
     bg_removed_img = remove(image, alpha_matting=True, session=session, post_process_mask=True)
     # bg_removed_img.save(OUTPUT_IMAGE_REMOVED_BG_PATH)  # Test purpose
-    x1, y1, x2, y2 = bg_removed_img.getbbox()
-    return bg_removed_img.crop((x1 - PADDING, y1, x2 + PADDING, y2 + PADDING))
+
+    actual_x1, actual_y1, actual_x2, _ = bg_removed_img.getbbox()
+
+    redbox_x1 = SQUARE_RED_BOX_COR[0]
+    redbox_y1 = SQUARE_RED_BOX_COR[1]
+    redbox_x2 = SQUARE_RED_BOX_COR[2]
+    redbox_y2 = SQUARE_RED_BOX_COR[3]
+
+    # trim transparent left, top and right sides (no extra transparent pixel in the bottom side) if there is padding
+    # in the image redbox
+    if actual_x1 > redbox_x1 and actual_x2 < redbox_x2 and actual_y1 > redbox_y1:
+        while redbox_x1 - 2 < actual_x1 and redbox_x2 > actual_x2 + 2 and redbox_y1 - 4 < actual_y1:
+            redbox_x1 += 2
+            redbox_x2 -= 2
+            redbox_y1 += 4
+
+        if actual_x1 > redbox_x1 and actual_y1 > redbox_y1:
+            while redbox_x1 - 2 < actual_x1 and redbox_y1 - 2 < actual_y1:
+                redbox_x1 += 2
+                redbox_y1 += 2
+
+        if actual_x2 < redbox_x2 and actual_y1 > redbox_y1:
+            while redbox_x2 > actual_x2 + 2 and redbox_y1 - 2 < actual_y1:
+                redbox_x2 -= 2
+                redbox_y1 += 2
+
+        return bg_removed_img.crop((redbox_x1, redbox_y1, redbox_x2, redbox_y2))
+    else:
+        return bg_removed_img.crop(SQUARE_RED_BOX_COR)
 
 
 def main():
@@ -70,6 +98,7 @@ def main():
     frame = cv2.imread(INPUT_PHOTO_PATH)
     detected_face = detector(frame, 0)
     face_count = len(detected_face)
+    # make sure only one face is in the frame.
     if face_count == 0:
         ill = 0.2126 * frame[..., 2] + 0.7152 * frame[..., 1] + 0.722 * frame[..., 0]
         if ill.mean() > 110:
@@ -79,7 +108,7 @@ def main():
     elif face_count > 1:
         print("Message= More than one person detected in frame")
     else:
-        for k, d in enumerate(detected_face):
+        for _, d in enumerate(detected_face):
             x_min, y_min, x_max, y_max = (d.left(), d.top(), d.right(), d.bottom())
             x_min = x_min - 50
             x_max = x_max + 50
@@ -89,6 +118,11 @@ def main():
             x_min = max(0, x_min - abs(x_min - x_max) / 7)
             x_max = min(frame.shape[1], x_max + abs(x_min - x_max) / 7)
             x_max = min(x_max, frame.shape[1])
+            # line thickness (negligible pixel)
+            if x_min < (SQUARE_RED_BOX_COR[0] - LINE_THICKNESS) or y_min < (
+                    SQUARE_RED_BOX_COR[1] - LINE_THICKNESS) or x_max > (SQUARE_RED_BOX_COR[2] + LINE_THICKNESS):
+                print("Message= Move your body to fit in the box.")
+                return
 
             if int(x_min) <= 0 or int(x_max) >= frame.shape[1] or int(y_min) <= 0 or int(y_max) >= frame.shape[0]:
                 print("Message= Face/Chest Going out of frame.....come to middle")
